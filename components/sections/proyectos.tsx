@@ -144,11 +144,8 @@ function ProyectoCard({
       viewport={{ once: true, margin: "-40px" }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="relative overflow-hidden rounded-2xl border border-white/[0.07] group cursor-default h-full"
-      style={{
-        background: BG[proyecto.rubro],
-        minHeight: wide ? "260px" : "220px",
-      }}
+      className={`relative overflow-hidden rounded-2xl border border-white/[0.07] group cursor-default h-[200px] sm:h-auto ${wide ? "sm:min-h-[260px]" : "sm:min-h-[220px]"}`}
+      style={{ background: BG[proyecto.rubro] }}
     >
       {/* Screenshot background image (when provided) */}
       {proyecto.image && (
@@ -164,13 +161,18 @@ function ProyectoCard({
               opacity: 0.35,
             }}
           />
-          {/* Gradient: transparent top → solid bottom so text is always readable */}
+          {/* Gradient overlay — desktop */}
           <div
-            className="absolute inset-0 pointer-events-none"
+            className="absolute inset-0 pointer-events-none hidden sm:block"
             style={{
               background:
-                "linear-gradient(to bottom, rgba(8,8,8,0.15) 0%, rgba(8,8,8,0.75) 55%, rgba(8,8,8,0.97) 100%)",
+                "linear-gradient(to bottom, rgba(8,8,8,0.20) 0%, rgba(8,8,8,0.78) 55%, rgba(8,8,8,0.97) 100%)",
             }}
+          />
+          {/* Solid overlay — mobile, rgba(0,0,0,0.7) to block all image text */}
+          <div
+            className="absolute inset-0 pointer-events-none sm:hidden"
+            style={{ background: "rgba(0,0,0,0.70)" }}
           />
         </>
       )}
@@ -215,7 +217,10 @@ function ProyectoCard({
 
         {/* Bottom: desc + large title + CTA slide */}
         <div>
-          <p className="text-gray-500 text-sm leading-relaxed mb-2">
+          <p
+            className="text-gray-300 sm:text-gray-500 text-sm leading-relaxed mb-2"
+            style={{ textShadow: "0 1px 6px rgba(0,0,0,0.95)" }}
+          >
             {proyecto.desc}
           </p>
           <h3
@@ -227,13 +232,14 @@ function ProyectoCard({
                 : "clamp(1.2rem, 2.2vw, 1.65rem)",
               fontWeight: 700,
               letterSpacing: "-0.025em",
+              textShadow: "0 2px 12px rgba(0,0,0,0.95)",
             }}
           >
             {proyecto.title}
           </h3>
 
-          {/* CTA slides up from bottom on hover */}
-          <div className="h-10 overflow-hidden">
+          {/* CTA slides up from bottom on hover — hidden on mobile */}
+          <div className="hidden sm:block h-10 overflow-hidden">
             <motion.a
               href={proyecto.url}
               target="_blank"
