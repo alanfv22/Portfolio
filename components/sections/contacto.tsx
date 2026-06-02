@@ -3,6 +3,16 @@
 import { motion } from "framer-motion";
 import { Mail } from "lucide-react";
 
+function InstagramIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
 function WhatsAppIcon({ className }: { className?: string }) {
   return (
     <svg
@@ -106,7 +116,7 @@ export function Contacto() {
             className="wa-pulse absolute inset-0 rounded-full pointer-events-none"
           />
           <a
-            href="https://wa.me/TUNUMERO"
+            href="https://wa.me/541162195594"
             target="_blank"
             rel="noopener noreferrer"
             className="relative inline-flex items-center gap-3 bg-[#25D366] hover:bg-[#1ebe5a] text-white font-bold rounded-full transition-colors duration-200 shadow-2xl shadow-green-900/30"
@@ -120,12 +130,13 @@ export function Contacto() {
           </a>
         </motion.div>
 
-        {/* Email link */}
+        {/* Secondary links: email + Instagram */}
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.32 }}
           viewport={{ once: true }}
+          className="flex flex-col sm:flex-row items-center justify-center gap-4"
         >
           <a
             href="mailto:alanfveron@gmail.com"
@@ -136,6 +147,16 @@ export function Contacto() {
               strokeWidth={1.5}
             />
             alanfveron@gmail.com
+          </a>
+          <span className="hidden sm:block text-gray-800 text-xs">·</span>
+          <a
+            href="https://instagram.com/alanfv.dev"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-300 transition-colors duration-200 text-sm group"
+          >
+            <InstagramIcon className="w-4 h-4 group-hover:text-pink-400 transition-colors duration-200" />
+            @alanfv.dev
           </a>
         </motion.div>
       </div>

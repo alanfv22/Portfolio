@@ -111,17 +111,6 @@ const PROYECTOS: Proyecto[] = [
   },
 ];
 
-// Asymmetric pattern in a 3-col grid (lg):
-//   [0 wide=2][1 narrow=1]
-//   [2 narrow=1][3 wide=2]
-//   [4 wide=2][5 narrow=1]
-//   [6 narrow=1][7 wide=2]
-// mod 4 === 0 or mod 4 === 3  → wide (col-span-2)
-function isWide(index: number) {
-  const m = index % 4;
-  return m === 0 || m === 3;
-}
-
 function ProyectoCard({
   proyecto,
   index,
@@ -130,7 +119,6 @@ function ProyectoCard({
   index: number;
 }) {
   const [hovered, setHovered] = useState(false);
-  const wide = isWide(index);
 
   return (
     <motion.article
@@ -138,13 +126,13 @@ function ProyectoCard({
       whileInView={{ opacity: 1, y: 0 }}
       transition={{
         duration: 0.55,
-        delay: (index % 2) * 0.1,
+        delay: (index % 4) * 0.07,
         ease: [0.25, 0.46, 0.45, 0.94],
       }}
       viewport={{ once: true, margin: "-40px" }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className={`relative overflow-hidden rounded-2xl border border-white/[0.07] group cursor-default h-[200px] sm:h-auto ${wide ? "sm:min-h-[260px]" : "sm:min-h-[220px]"}`}
+      className="relative overflow-hidden rounded-2xl border border-white/[0.07] group cursor-default h-[200px] sm:h-auto sm:min-h-[240px]"
       style={{ background: BG[proyecto.rubro] }}
     >
       {/* Screenshot background image (when provided) */}
@@ -161,12 +149,12 @@ function ProyectoCard({
               opacity: 0.35,
             }}
           />
-          {/* Gradient overlay — desktop */}
+          {/* Gradient overlay — desktop, rgba(0,0,0,0.65) at top */}
           <div
             className="absolute inset-0 pointer-events-none hidden sm:block"
             style={{
               background:
-                "linear-gradient(to bottom, rgba(8,8,8,0.20) 0%, rgba(8,8,8,0.78) 55%, rgba(8,8,8,0.97) 100%)",
+                "linear-gradient(to bottom, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.80) 55%, rgba(0,0,0,0.97) 100%)",
             }}
           />
           {/* Solid overlay — mobile, rgba(0,0,0,0.7) to block all image text */}
@@ -227,9 +215,7 @@ function ProyectoCard({
             className="text-white leading-tight mb-5"
             style={{
               fontFamily: "var(--font-playfair), Georgia, serif",
-              fontSize: wide
-                ? "clamp(1.5rem, 2.8vw, 2.4rem)"
-                : "clamp(1.2rem, 2.2vw, 1.65rem)",
+              fontSize: "clamp(1.15rem, 2vw, 1.5rem)",
               fontWeight: 700,
               letterSpacing: "-0.025em",
               textShadow: "0 2px 12px rgba(0,0,0,0.95)",
@@ -302,15 +288,10 @@ export function Proyectos() {
           </h2>
         </motion.div>
 
-        {/* Asymmetric grid — on lg uses 3 cols with alternating wide cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {/* Uniform grid — 2 cols on sm, 4 cols on lg → 8 cards in 2 rows of 4 */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {PROYECTOS.map((p, i) => (
-            <div
-              key={p.title}
-              className={isWide(i) ? "lg:col-span-2" : "lg:col-span-1"}
-            >
-              <ProyectoCard proyecto={p} index={i} />
-            </div>
+            <ProyectoCard key={p.title} proyecto={p} index={i} />
           ))}
         </div>
       </div>

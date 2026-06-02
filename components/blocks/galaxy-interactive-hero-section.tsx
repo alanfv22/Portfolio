@@ -119,14 +119,18 @@ function Navbar() {
       }}
     >
       <div className="container mx-auto px-5 py-4 flex items-center justify-between">
-        {/* Monograma AV */}
+        {/* Logo */}
         <button
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="text-white font-black text-2xl tracking-tighter select-none leading-none"
-          style={{ fontFamily: 'system-ui, sans-serif', letterSpacing: '-0.04em' }}
+          className="select-none leading-none flex items-center"
           aria-label="Inicio"
         >
-          AV
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/images/logoAv.jpeg"
+            alt="Alan Veron"
+            className="h-9 w-auto object-contain"
+          />
         </button>
 
         {/* Links desktop */}
