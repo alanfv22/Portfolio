@@ -16,7 +16,7 @@ export function FooterSection() {
       <div className="container mx-auto max-w-6xl flex flex-col sm:flex-row items-center justify-between gap-4">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/images/logoAv.jpeg"
+          src="/images/LogoAvsinFondo.jpeg"
           alt="Alan Veron"
           className="h-12 w-auto object-contain select-none"
         />

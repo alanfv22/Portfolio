@@ -127,7 +127,7 @@ function Navbar() {
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/images/logoAv.jpeg"
+            src="/images/LogoAvsinFondo.jpeg"
             alt="Alan Veron"
             className="h-14 w-auto object-contain"
           />
