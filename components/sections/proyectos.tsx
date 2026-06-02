@@ -12,7 +12,8 @@ interface Proyecto {
   rubroLabel: string;
   desc: string;
   url: string;
-  tags: string[];
+  features: string[];
+  image?: string;
 }
 
 // Radial gradient backgrounds per rubro — all start with a color bloom,
@@ -42,7 +43,8 @@ const PROYECTOS: Proyecto[] = [
     rubroLabel: "Ropa",
     desc: "Tienda de ropa online con catálogo y carrito",
     url: "https://www.zeusindu.com/",
-    tags: ["Next.js", "Tailwind", "MercadoPago"],
+    features: ["Tienda online", "Carrito", "Mercado Pago"],
+    image: "/images/zeus.jpeg",
   },
   {
     title: "Solari Indumentaria",
@@ -50,7 +52,8 @@ const PROYECTOS: Proyecto[] = [
     rubroLabel: "Ropa",
     desc: "Tienda de ropa con catálogo",
     url: "https://www.solari-ind.com/",
-    tags: ["Next.js", "Tailwind", "MercadoPago"],
+    features: ["Tienda online", "Carrito", "Mercado Pago"],
+    image: "/images/Solari.jpeg",
   },
   {
     title: "Fitness Website",
@@ -58,7 +61,8 @@ const PROYECTOS: Proyecto[] = [
     rubroLabel: "Fitness",
     desc: "Sitio de gimnasio orientado a conversión",
     url: "https://v0-fitness-website-conversion.vercel.app/",
-    tags: ["Next.js", "Tailwind", "Vercel"],
+    features: ["Landing", "Turnos online", "Conversión"],
+    image: "/images/fitness.jpeg",
   },
   {
     title: "Lemon Suplementos",
@@ -66,7 +70,8 @@ const PROYECTOS: Proyecto[] = [
     rubroLabel: "Fitness",
     desc: "Ecommerce de suplementos fitness",
     url: "https://suplementos-lemon.vercel.app/",
-    tags: ["Next.js", "Tailwind", "MercadoPago"],
+    features: ["Ecommerce", "Stock automático", "Pagos"],
+    image: "/images/Lemon.jpeg",
   },
   {
     title: "Gonzalo Legarda",
@@ -74,7 +79,7 @@ const PROYECTOS: Proyecto[] = [
     rubroLabel: "Gastronomía",
     desc: "Catering y menú digital",
     url: "https://gonzalo-legarda.vercel.app/",
-    tags: ["Next.js", "Tailwind", "Vercel"],
+    features: ["Menú digital", "Reservas", "Pedidos"],
   },
   {
     title: "Todo Lindo Bazar",
@@ -82,7 +87,7 @@ const PROYECTOS: Proyecto[] = [
     rubroLabel: "Bazar",
     desc: "Tienda online de bazar y deco",
     url: "https://todo-lindo-showcase.vercel.app/",
-    tags: ["Next.js", "Tailwind", "MercadoPago"],
+    features: ["Tienda online", "Catálogo", "Pagos"],
   },
   {
     title: "Mariela Beauty Studio",
@@ -90,7 +95,7 @@ const PROYECTOS: Proyecto[] = [
     rubroLabel: "Belleza",
     desc: "Estudio de belleza con reservas online",
     url: "https://www.mariela-beauty-studio.com/",
-    tags: ["Next.js", "Tailwind", "Reservas Online"],
+    features: ["Turnos online", "Agenda", "Recordatorios"],
   },
   {
     title: "Corte y Plegado",
@@ -98,7 +103,7 @@ const PROYECTOS: Proyecto[] = [
     rubroLabel: "Industrial",
     desc: "Sitio corporativo para herrería industrial",
     url: "https://corte-y-plegado.vercel.app/",
-    tags: ["Next.js", "Tailwind", "Vercel"],
+    features: ["Catálogo", "Presupuestos", "Contacto"],
   },
 ];
 
@@ -141,6 +146,31 @@ function ProyectoCard({
         minHeight: wide ? "260px" : "220px",
       }}
     >
+      {/* Screenshot background image (when provided) */}
+      {proyecto.image && (
+        <>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={proyecto.image}
+            alt=""
+            aria-hidden="true"
+            className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-500"
+            style={{
+              transform: hovered ? "scale(1.04)" : "scale(1)",
+              opacity: 0.35,
+            }}
+          />
+          {/* Gradient: transparent top → solid bottom so text is always readable */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background:
+                "linear-gradient(to bottom, rgba(8,8,8,0.15) 0%, rgba(8,8,8,0.75) 55%, rgba(8,8,8,0.97) 100%)",
+            }}
+          />
+        </>
+      )}
+
       {/* Hover overlay */}
       <motion.div
         className="absolute inset-0 pointer-events-none"
@@ -158,7 +188,7 @@ function ProyectoCard({
       />
 
       <div className="relative h-full p-6 sm:p-8 flex flex-col justify-between gap-6">
-        {/* Top row: rubro badge + tech tags */}
+        {/* Top row: rubro badge + client feature pills */}
         <div className="flex items-start justify-between gap-3 flex-wrap">
           <span
             className={`text-[11px] font-semibold px-3 py-1 rounded-full border border-white/[0.1] ${BADGE_TEXT[proyecto.rubro]}`}
@@ -167,13 +197,13 @@ function ProyectoCard({
             {proyecto.rubroLabel}
           </span>
           <div className="flex gap-1.5 flex-wrap justify-end">
-            {proyecto.tags.map((tag) => (
+            {proyecto.features.map((feat) => (
               <span
-                key={tag}
-                className="text-[10px] text-white/25 font-mono border border-white/[0.07] px-2 py-0.5 rounded"
-                style={{ background: "rgba(255,255,255,0.03)" }}
+                key={feat}
+                className="text-[11px] text-white/50 border border-white/[0.10] px-2.5 py-0.5 rounded-full"
+                style={{ background: "rgba(255,255,255,0.04)" }}
               >
-                {tag}
+                {feat}
               </span>
             ))}
           </div>
