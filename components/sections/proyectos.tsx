@@ -80,6 +80,7 @@ const PROYECTOS: Proyecto[] = [
     desc: "Catering y menú digital",
     url: "https://gonzalo-legarda.vercel.app/",
     features: ["Menú digital", "Reservas", "Pedidos"],
+    image: "/images/Gonzalo.jpeg",
   },
   {
     title: "Todo Lindo Bazar",
@@ -88,6 +89,7 @@ const PROYECTOS: Proyecto[] = [
     desc: "Tienda online de bazar y deco",
     url: "https://todo-lindo-showcase.vercel.app/",
     features: ["Tienda online", "Catálogo", "Pagos"],
+    image: "/images/Bazr.jpeg",
   },
   {
     title: "Mariela Beauty Studio",
@@ -96,6 +98,7 @@ const PROYECTOS: Proyecto[] = [
     desc: "Estudio de belleza con reservas online",
     url: "https://www.mariela-beauty-studio.com/",
     features: ["Turnos online", "Agenda", "Recordatorios"],
+    image: "/images/Mariela.jpeg",
   },
   {
     title: "Corte y Plegado",
@@ -104,6 +107,7 @@ const PROYECTOS: Proyecto[] = [
     desc: "Sitio corporativo para herrería industrial",
     url: "https://corte-y-plegado.vercel.app/",
     features: ["Catálogo", "Presupuestos", "Contacto"],
+    image: "/images/CorteYPlegado.jpeg",
   },
 ];
 
