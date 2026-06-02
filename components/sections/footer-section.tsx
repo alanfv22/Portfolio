@@ -18,7 +18,7 @@ export function FooterSection() {
         <img
           src="/images/logoAv.jpeg"
           alt="Alan Veron"
-          className="h-9 w-auto object-contain select-none"
+          className="h-12 w-auto object-contain select-none"
         />
 
         {/* Social + copyright */}
