@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 
@@ -16,24 +15,23 @@ interface Proyecto {
   image?: string;
 }
 
-// Radial gradient backgrounds per rubro — all start with a color bloom,
-// fade to deep black so the typography is always readable.
-const BG: Record<Rubro, string> = {
-  ropa: "radial-gradient(ellipse at 15% 15%, rgba(139,92,246,0.30) 0%, rgba(8,8,8,0.96) 55%)",
-  fitness: "radial-gradient(ellipse at 15% 15%, rgba(16,185,129,0.28) 0%, rgba(8,8,8,0.96) 55%)",
-  comida: "radial-gradient(ellipse at 15% 15%, rgba(249,115,22,0.28) 0%, rgba(8,8,8,0.96) 55%)",
-  belleza: "radial-gradient(ellipse at 15% 15%, rgba(236,72,153,0.28) 0%, rgba(8,8,8,0.96) 55%)",
-  industrial: "radial-gradient(ellipse at 15% 15%, rgba(100,116,139,0.26) 0%, rgba(8,8,8,0.96) 55%)",
-  bazar: "radial-gradient(ellipse at 15% 15%, rgba(245,158,11,0.28) 0%, rgba(8,8,8,0.96) 55%)",
+// Gradient fallback when no image is available
+const BG_FALLBACK: Record<Rubro, string> = {
+  ropa:       "radial-gradient(135deg, rgba(139,92,246,0.35) 0%, #1a1a1a 70%)",
+  fitness:    "radial-gradient(135deg, rgba(16,185,129,0.32) 0%, #1a1a1a 70%)",
+  comida:     "radial-gradient(135deg, rgba(249,115,22,0.32) 0%, #1a1a1a 70%)",
+  belleza:    "radial-gradient(135deg, rgba(236,72,153,0.32) 0%, #1a1a1a 70%)",
+  industrial: "radial-gradient(135deg, rgba(100,116,139,0.30) 0%, #1a1a1a 70%)",
+  bazar:      "radial-gradient(135deg, rgba(245,158,11,0.32) 0%, #1a1a1a 70%)",
 };
 
 const BADGE_TEXT: Record<Rubro, string> = {
-  ropa: "text-violet-300",
-  fitness: "text-emerald-300",
-  comida: "text-orange-300",
-  belleza: "text-pink-300",
+  ropa:       "text-violet-300",
+  fitness:    "text-emerald-300",
+  comida:     "text-orange-300",
+  belleza:    "text-pink-300",
   industrial: "text-slate-300",
-  bazar: "text-amber-300",
+  bazar:      "text-amber-300",
 };
 
 const PROYECTOS: Proyecto[] = [
@@ -111,6 +109,67 @@ const PROYECTOS: Proyecto[] = [
   },
 ];
 
+// Extracts "www.sitio.com" from a full URL for the fake address bar
+function extractDomain(url: string) {
+  return url.replace(/^https?:\/\//, "").replace(/\/$/, "");
+}
+
+function BrowserMockup({
+  image,
+  url,
+  rubro,
+  title,
+}: {
+  image?: string;
+  url: string;
+  rubro: Rubro;
+  title: string;
+}) {
+  return (
+    <div className="flex-shrink-0 rounded-t-xl overflow-hidden" style={{ background: "#1a1a1a" }}>
+      {/* Browser chrome bar */}
+      <div
+        className="flex items-center gap-2 px-3 py-2"
+        style={{ background: "#252525" }}
+      >
+        {/* Traffic-light dots */}
+        <div className="flex items-center gap-1.5 shrink-0">
+          <div className="w-2.5 h-2.5 rounded-full" style={{ background: "#ff5f57" }} />
+          <div className="w-2.5 h-2.5 rounded-full" style={{ background: "#febc2e" }} />
+          <div className="w-2.5 h-2.5 rounded-full" style={{ background: "#28c840" }} />
+        </div>
+        {/* Fake URL bar */}
+        <div
+          className="flex-1 min-w-0 rounded px-2.5 py-1 font-mono truncate"
+          style={{
+            background: "#1a1a1a",
+            fontSize: "0.65rem",
+            color: "rgba(156,163,175,0.6)",
+          }}
+        >
+          {extractDomain(url)}
+        </div>
+      </div>
+
+      {/* Screenshot / fallback */}
+      <div
+        className="h-[172px] lg:h-[192px] overflow-hidden"
+        style={{ background: BG_FALLBACK[rubro] }}
+      >
+        {image && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={image}
+            alt={title}
+            className="w-full h-full object-cover object-top"
+            loading="lazy"
+          />
+        )}
+      </div>
+    </div>
+  );
+}
+
 function ProyectoCard({
   proyecto,
   index,
@@ -118,130 +177,96 @@ function ProyectoCard({
   proyecto: Proyecto;
   index: number;
 }) {
-  const [hovered, setHovered] = useState(false);
-
   return (
     <motion.article
-      initial={{ opacity: 0, y: 32 }}
+      initial={{ opacity: 0, y: 28 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{
-        duration: 0.55,
-        delay: (index % 4) * 0.07,
+        duration: 0.5,
+        delay: (index % 3) * 0.08,
         ease: [0.25, 0.46, 0.45, 0.94],
       }}
       viewport={{ once: true, margin: "-40px" }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      className="relative overflow-hidden rounded-2xl border border-white/[0.07] group cursor-default h-[200px] sm:h-auto sm:min-h-[240px]"
-      style={{ background: BG[proyecto.rubro] }}
+      whileHover={{ y: -4, transition: { type: "spring", stiffness: 300, damping: 24 } }}
+      className="flex flex-col rounded-xl overflow-hidden border border-white/[0.08] h-full cursor-default"
+      style={{
+        background: "#111",
+        boxShadow: "0 2px 12px rgba(0,0,0,0.3)",
+        transition: "box-shadow 0.3s ease",
+      }}
+      onMouseEnter={(e) => {
+        (e.currentTarget as HTMLElement).style.boxShadow =
+          "0 12px 40px rgba(0,0,0,0.6)";
+      }}
+      onMouseLeave={(e) => {
+        (e.currentTarget as HTMLElement).style.boxShadow =
+          "0 2px 12px rgba(0,0,0,0.3)";
+      }}
     >
-      {/* Screenshot background image (when provided) */}
-      {proyecto.image && (
-        <>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={proyecto.image}
-            alt=""
-            aria-hidden="true"
-            className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-500"
-            style={{
-              transform: hovered ? "scale(1.04)" : "scale(1)",
-              opacity: 0.35,
-            }}
-          />
-          {/* Gradient overlay — desktop, rgba(0,0,0,0.65) at top */}
-          <div
-            className="absolute inset-0 pointer-events-none hidden sm:block"
-            style={{
-              background:
-                "linear-gradient(to bottom, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.80) 55%, rgba(0,0,0,0.97) 100%)",
-            }}
-          />
-          {/* Solid overlay — mobile, rgba(0,0,0,0.7) to block all image text */}
-          <div
-            className="absolute inset-0 pointer-events-none sm:hidden"
-            style={{ background: "rgba(0,0,0,0.70)" }}
-          />
-        </>
-      )}
-
-      {/* Hover overlay */}
-      <motion.div
-        className="absolute inset-0 pointer-events-none"
-        animate={{ opacity: hovered ? 1 : 0 }}
-        transition={{ duration: 0.28 }}
-        style={{ background: "rgba(0,0,0,0.18)" }}
+      {/* ── Top: browser mockup ── */}
+      <BrowserMockup
+        image={proyecto.image}
+        url={proyecto.url}
+        rubro={proyecto.rubro}
+        title={proyecto.title}
       />
 
-      {/* Border glow on hover */}
-      <motion.div
-        className="absolute inset-0 rounded-2xl pointer-events-none"
-        animate={{ opacity: hovered ? 1 : 0 }}
-        transition={{ duration: 0.3 }}
-        style={{ boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.12)" }}
-      />
+      {/* ── Bottom: info ── */}
+      <div className="flex flex-col flex-1 p-5 gap-3">
+        {/* Rubro badge */}
+        <span
+          className={`self-start text-[11px] font-semibold px-3 py-1 rounded-full border border-white/[0.1] ${BADGE_TEXT[proyecto.rubro]}`}
+          style={{ background: "rgba(0,0,0,0.4)" }}
+        >
+          {proyecto.rubroLabel}
+        </span>
 
-      <div className="relative h-full p-6 sm:p-8 flex flex-col justify-between gap-6">
-        {/* Top row: rubro badge + client feature pills */}
-        <div className="flex items-start justify-between gap-3 flex-wrap">
-          <span
-            className={`text-[11px] font-semibold px-3 py-1 rounded-full border border-white/[0.1] ${BADGE_TEXT[proyecto.rubro]}`}
-            style={{ background: "rgba(0,0,0,0.35)" }}
-          >
-            {proyecto.rubroLabel}
-          </span>
-          <div className="flex gap-1.5 flex-wrap justify-end">
-            {proyecto.features.map((feat) => (
-              <span
-                key={feat}
-                className="text-[11px] text-white/50 border border-white/[0.10] px-2.5 py-0.5 rounded-full"
-                style={{ background: "rgba(255,255,255,0.04)" }}
-              >
-                {feat}
-              </span>
-            ))}
-          </div>
+        {/* Project name */}
+        <h3
+          className="text-white leading-tight"
+          style={{
+            fontFamily: "var(--font-playfair), Georgia, serif",
+            fontSize: "clamp(1.05rem, 1.6vw, 1.25rem)",
+            fontWeight: 700,
+            letterSpacing: "-0.02em",
+          }}
+        >
+          {proyecto.title}
+        </h3>
+
+        {/* Short description */}
+        <p className="text-gray-500 text-sm leading-relaxed">
+          {proyecto.desc}
+        </p>
+
+        {/* Feature pills */}
+        <div className="flex flex-wrap gap-1.5">
+          {proyecto.features.map((feat) => (
+            <span
+              key={feat}
+              className="text-[11px] text-white/45 border border-white/[0.09] px-2.5 py-0.5 rounded-full"
+              style={{ background: "rgba(255,255,255,0.04)" }}
+            >
+              {feat}
+            </span>
+          ))}
         </div>
 
-        {/* Bottom: desc + large title + CTA slide */}
-        <div>
-          <p
-            className="text-gray-300 sm:text-gray-500 text-sm leading-relaxed mb-2"
-            style={{ textShadow: "0 1px 6px rgba(0,0,0,0.95)" }}
+        {/* CTA — always visible */}
+        <div className="mt-auto pt-3 border-t border-white/[0.06]">
+          <a
+            href={proyecto.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`Ver sitio de ${proyecto.title}`}
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-white/60 hover:text-white transition-colors duration-200 group"
           >
-            {proyecto.desc}
-          </p>
-          <h3
-            className="text-white leading-tight mb-5"
-            style={{
-              fontFamily: "var(--font-playfair), Georgia, serif",
-              fontSize: "clamp(1.15rem, 2vw, 1.5rem)",
-              fontWeight: 700,
-              letterSpacing: "-0.025em",
-              textShadow: "0 2px 12px rgba(0,0,0,0.95)",
-            }}
-          >
-            {proyecto.title}
-          </h3>
-
-          {/* CTA slides up from bottom on hover — hidden on mobile */}
-          <div className="hidden sm:block h-10 overflow-hidden">
-            <motion.a
-              href={proyecto.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`Ver sitio de ${proyecto.title}`}
-              className="inline-flex items-center gap-2 text-sm font-semibold text-white border border-white/20 px-5 py-2.5 rounded-lg backdrop-blur-sm transition-colors duration-200 hover:bg-white/10"
-              style={{ background: "rgba(255,255,255,0.07)" }}
-              initial={false}
-              animate={{ y: hovered ? 0 : 44, opacity: hovered ? 1 : 0 }}
-              transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <ArrowUpRight className="w-4 h-4" strokeWidth={2} />
-              Ver sitio
-            </motion.a>
-          </div>
+            Ver sitio
+            <ArrowUpRight
+              className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200"
+              strokeWidth={2}
+            />
+          </a>
         </div>
       </div>
     </motion.article>
@@ -254,8 +279,9 @@ export function Proyectos() {
       id="proyectos"
       className="relative bg-[#080808] py-28 px-4 overflow-hidden"
     >
-      {/* Subtle center ambient light */}
+      {/* Ambient glow */}
       <div
+        aria-hidden="true"
         className="absolute inset-0 pointer-events-none"
         style={{
           background:
@@ -288,8 +314,8 @@ export function Proyectos() {
           </h2>
         </motion.div>
 
-        {/* Uniform grid — 2 cols on sm, 4 cols on lg → 8 cards in 2 rows of 4 */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Grid: 1 col mobile · 2 col tablet · 3 col desktop */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {PROYECTOS.map((p, i) => (
             <ProyectoCard key={p.title} proyecto={p} index={i} />
           ))}
